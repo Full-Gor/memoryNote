@@ -10,11 +10,13 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useNotes } from '@/contexts/NotesContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Note } from '@/types/Note';
 import { Search, X, Clock, Tag, Filter } from 'lucide-react-native';
 
 export default function SearchScreen() {
   const { notes, searchNotes, categories } = useNotes();
+  const { isDarkMode } = useTheme();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Note[]>([]);
@@ -69,13 +71,13 @@ export default function SearchScreen() {
 
     return (
       <TouchableOpacity
-        style={styles.resultCard}
+        style={[styles.resultCard, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}
         onPress={() => router.push(`/note/${item.id}`)}
       >
-        <Text style={styles.resultTitle} numberOfLines={1}>
+        <Text style={[styles.resultTitle, { color: isDarkMode ? '#fff' : '#333' }]} numberOfLines={1}>
           {item.title || 'Note sans titre'}
         </Text>
-        <Text style={styles.resultContent} numberOfLines={2}>
+        <Text style={[styles.resultContent, { color: isDarkMode ? '#ccc' : '#666' }]} numberOfLines={2}>
           {item.content}
         </Text>
 
@@ -86,7 +88,7 @@ export default function SearchScreen() {
             </View>
           )}
 
-          <Text style={styles.resultDate}>
+          <Text style={[styles.resultDate, { color: isDarkMode ? '#999' : '#999' }]}>
             {item.updatedAt.toLocaleDateString()}
           </Text>
         </View>
@@ -110,8 +112,8 @@ export default function SearchScreen() {
       style={styles.recentItem}
       onPress={() => handleSearch(search)}
     >
-      <Clock size={16} color="#666" />
-      <Text style={styles.recentText}>{search}</Text>
+      <Clock size={16} color={isDarkMode ? '#ccc' : '#666'} />
+      <Text style={[styles.recentText, { color: isDarkMode ? '#ccc' : '#666' }]}>{search}</Text>
     </TouchableOpacity>
   );
 
@@ -124,10 +126,11 @@ export default function SearchScreen() {
       ]}
       onPress={() => toggleTag(tag)}
     >
-      <Tag size={14} color={selectedTags.includes(tag) ? '#fff' : '#666'} />
+      <Tag size={14} color={selectedTags.includes(tag) ? '#fff' : (isDarkMode ? '#ccc' : '#666')} />
       <Text style={[
         styles.filterTagText,
-        selectedTags.includes(tag) && styles.filterTagTextSelected
+        selectedTags.includes(tag) && styles.filterTagTextSelected,
+        !selectedTags.includes(tag) && { color: isDarkMode ? '#ccc' : '#666' }
       ]}>
         {tag}
       </Text>
@@ -135,39 +138,40 @@ export default function SearchScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Recherche</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDarkMode ? '#1a1a1a' : '#f5f5f5' }]}>
+      <View style={[styles.header, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff', borderBottomColor: isDarkMode ? '#333' : '#e0e0e0' }]}>
+        <Text style={[styles.headerTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Recherche</Text>
       </View>
 
-      <View style={styles.searchContainer}>
-        <View style={styles.searchInputContainer}>
-          <Search size={20} color="#666" />
+      <View style={[styles.searchContainer, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff', borderBottomColor: isDarkMode ? '#333' : '#e0e0e0' }]}>
+        <View style={[styles.searchInputContainer, { backgroundColor: isDarkMode ? '#333' : '#f5f5f5' }]}>
+          <Search size={20} color={isDarkMode ? '#ccc' : '#666'} />
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, { color: isDarkMode ? '#fff' : '#333' }]}
             placeholder="Rechercher dans vos notes..."
+            placeholderTextColor={isDarkMode ? '#999' : '#999'}
             value={searchQuery}
             onChangeText={handleSearch}
             autoCapitalize="none"
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={clearSearch}>
-              <X size={20} color="#666" />
+              <X size={20} color={isDarkMode ? '#ccc' : '#666'} />
             </TouchableOpacity>
           )}
         </View>
 
         <TouchableOpacity
-          style={[styles.filterButton, showFilters && styles.filterButtonActive]}
+          style={[styles.filterButton, showFilters && styles.filterButtonActive, { backgroundColor: isDarkMode && !showFilters ? '#333' : undefined }]}
           onPress={() => setShowFilters(!showFilters)}
         >
-          <Filter size={20} color={showFilters ? '#fff' : '#666'} />
+          <Filter size={20} color={showFilters ? '#fff' : (isDarkMode ? '#ccc' : '#666')} />
         </TouchableOpacity>
       </View>
 
       {showFilters && (
-        <View style={styles.filtersContainer}>
-          <Text style={styles.filtersTitle}>Filtrer par tags:</Text>
+        <View style={[styles.filtersContainer, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff', borderBottomColor: isDarkMode ? '#333' : '#e0e0e0' }]}>
+          <Text style={[styles.filtersTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Filtrer par tags:</Text>
           <View style={styles.tagsFilter}>
             {allTags.map(renderTag)}
           </View>
@@ -176,7 +180,7 @@ export default function SearchScreen() {
               style={styles.clearFilters}
               onPress={() => setSelectedTags([])}
             >
-              <Text style={styles.clearFiltersText}>Effacer les filtres</Text>
+              <Text style={[styles.clearFiltersText, { color: isDarkMode ? '#4CAF50' : '#2196F3' }]}>Effacer les filtres</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -186,28 +190,28 @@ export default function SearchScreen() {
         <View style={styles.emptySearch}>
           {recentSearches.length > 0 && (
             <View style={styles.recentSearches}>
-              <Text style={styles.recentTitle}>Recherches récentes</Text>
+              <Text style={[styles.recentTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Recherches récentes</Text>
               {recentSearches.map(renderRecentSearch)}
             </View>
           )}
 
-          <View style={styles.searchTips}>
-            <Text style={styles.tipsTitle}>Conseils de recherche:</Text>
-            <Text style={styles.tipText}>• Recherchez par titre, contenu ou tags</Text>
-            <Text style={styles.tipText}>• Utilisez les filtres pour affiner</Text>
-            <Text style={styles.tipText}>• Les résultats sont triés par pertinence</Text>
+          <View style={[styles.searchTips, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}>
+            <Text style={[styles.tipsTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Conseils de recherche:</Text>
+            <Text style={[styles.tipText, { color: isDarkMode ? '#ccc' : '#666' }]}>• Recherchez par titre, contenu ou tags</Text>
+            <Text style={[styles.tipText, { color: isDarkMode ? '#ccc' : '#666' }]}>• Utilisez les filtres pour affiner</Text>
+            <Text style={[styles.tipText, { color: isDarkMode ? '#ccc' : '#666' }]}>• Les résultats sont triés par pertinence</Text>
           </View>
         </View>
       ) : (
         <View style={styles.resultsContainer}>
-          <Text style={styles.resultsCount}>
+          <Text style={[styles.resultsCount, { color: isDarkMode ? '#ccc' : '#666' }]}>
             {searchResults.length} résultat{searchResults.length !== 1 ? 's' : ''} trouvé{searchResults.length !== 1 ? 's' : ''}
           </Text>
 
           {searchResults.length === 0 ? (
             <View style={styles.noResults}>
-              <Text style={styles.noResultsText}>Aucun résultat trouvé</Text>
-              <Text style={styles.noResultsSubtext}>
+              <Text style={[styles.noResultsText, { color: isDarkMode ? '#ccc' : '#666' }]}>Aucun résultat trouvé</Text>
+              <Text style={[styles.noResultsSubtext, { color: isDarkMode ? '#999' : '#999' }]}>
                 Essayez avec d'autres mots-clés
               </Text>
             </View>
@@ -228,33 +232,26 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   header: {
     padding: 20,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
     marginTop: 15,
   },
   searchContainer: {
     flexDirection: 'row',
     padding: 16,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
     gap: 12,
   },
   searchInputContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     borderRadius: 25,
     paddingHorizontal: 16,
     paddingVertical: 12,
@@ -263,7 +260,6 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
   },
   filterButton: {
     width: 48,
@@ -277,15 +273,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196F3',
   },
   filtersContainer: {
-    backgroundColor: '#fff',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   filtersTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 12,
   },
   tagsFilter: {
@@ -307,7 +300,6 @@ const styles = StyleSheet.create({
   },
   filterTagText: {
     fontSize: 14,
-    color: '#666',
   },
   filterTagTextSelected: {
     color: '#fff',
@@ -318,7 +310,6 @@ const styles = StyleSheet.create({
   },
   clearFiltersText: {
     fontSize: 14,
-    color: '#2196F3',
   },
   emptySearch: {
     flex: 1,
@@ -330,7 +321,6 @@ const styles = StyleSheet.create({
   recentTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 16,
   },
   recentItem: {
@@ -341,22 +331,18 @@ const styles = StyleSheet.create({
   },
   recentText: {
     fontSize: 16,
-    color: '#666',
   },
   searchTips: {
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
   },
   tipsTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 12,
   },
   tipText: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 8,
   },
   resultsContainer: {
@@ -365,11 +351,9 @@ const styles = StyleSheet.create({
   },
   resultsCount: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 16,
   },
   resultCard: {
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -382,12 +366,10 @@ const styles = StyleSheet.create({
   resultTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   resultContent: {
     fontSize: 14,
-    color: '#666',
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -409,7 +391,6 @@ const styles = StyleSheet.create({
   },
   resultDate: {
     fontSize: 12,
-    color: '#999',
   },
   tagsContainer: {
     flexDirection: 'row',
@@ -432,11 +413,9 @@ const styles = StyleSheet.create({
   noResultsText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#666',
     marginBottom: 8,
   },
   noResultsSubtext: {
     fontSize: 14,
-    color: '#999',
   },
 });

@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { useNotes } from '@/contexts/NotesContext';
 import { useAnimation } from '@/contexts/AnimationContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Category } from '@/types/Note';
 import { Folder, Plus, CreditCard as Edit3, Trash2, X } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
@@ -31,6 +32,7 @@ export default function CategoriesScreen() {
     widget2Animations,
     widget3Animations
   } = useAnimation();
+  const { isDarkMode } = useTheme();
   const [showModal, setShowModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [categoryName, setCategoryName] = useState('');
@@ -160,7 +162,7 @@ export default function CategoriesScreen() {
 
     return (
       <TouchableOpacity
-        style={styles.categoryCard}
+        style={[styles.categoryCard, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}
         onPress={() => {
           // Naviguer vers la page d'accueil avec la catégorie sélectionnée
           router.push({
@@ -181,8 +183,8 @@ export default function CategoriesScreen() {
               <Folder size={20} color="#fff" />
             </Animated.View>
             <View style={styles.categoryDetails}>
-              <Text style={styles.categoryName}>{item.name}</Text>
-              <Text style={styles.categoryCount}>
+              <Text style={[styles.categoryName, { color: isDarkMode ? '#fff' : '#333' }]}>{item.name}</Text>
+              <Text style={[styles.categoryCount, { color: isDarkMode ? '#ccc' : '#666' }]}>
                 {notesCount} note{notesCount !== 1 ? 's' : ''}
               </Text>
             </View>
@@ -196,7 +198,7 @@ export default function CategoriesScreen() {
                 handleEditCategory(item);
               }}
             >
-              <Edit3 size={16} color="#666" />
+              <Edit3 size={16} color={isDarkMode ? '#ccc' : '#666'} />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.actionButton}
@@ -226,9 +228,9 @@ export default function CategoriesScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Catégories</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDarkMode ? '#1a1a1a' : '#f5f5f5' }]}>
+      <View style={[styles.header, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff', borderBottomColor: isDarkMode ? '#333' : '#e0e0e0' }]}>
+        <Text style={[styles.headerTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Catégories</Text>
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => setShowModal(true)}
@@ -238,21 +240,21 @@ export default function CategoriesScreen() {
       </View>
 
       <View style={styles.statsContainer}>
-        <View style={styles.statCard}>
+        <View style={[styles.statCard, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}>
           <Text style={styles.statNumber}>{categories.length}</Text>
-          <Text style={styles.statLabel}>Catégories</Text>
+          <Text style={[styles.statLabel, { color: isDarkMode ? '#ccc' : '#666' }]}>Catégories</Text>
         </View>
-        <View style={styles.statCard}>
+        <View style={[styles.statCard, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}>
           <Text style={styles.statNumber}>{notes.length}</Text>
-          <Text style={styles.statLabel}>Notes totales</Text>
+          <Text style={[styles.statLabel, { color: isDarkMode ? '#ccc' : '#666' }]}>Notes totales</Text>
         </View>
       </View>
 
       {categories.length === 0 ? (
         <View style={styles.emptyState}>
           <Folder size={64} color="#ccc" />
-          <Text style={styles.emptyStateText}>Aucune catégorie</Text>
-          <Text style={styles.emptyStateSubtext}>
+          <Text style={[styles.emptyStateText, { color: isDarkMode ? '#ccc' : '#666' }]}>Aucune catégorie</Text>
+          <Text style={[styles.emptyStateSubtext, { color: isDarkMode ? '#999' : '#999' }]}>
             Créez votre première catégorie pour organiser vos notes
           </Text>
         </View>
@@ -273,38 +275,43 @@ export default function CategoriesScreen() {
         onRequestClose={resetModal}
       >
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>
+              <Text style={[styles.modalTitle, { color: isDarkMode ? '#fff' : '#333' }]}>
                 {editingCategory ? 'Modifier la catégorie' : 'Nouvelle catégorie'}
               </Text>
               <TouchableOpacity onPress={resetModal}>
-                <X size={24} color="#666" />
+                <X size={24} color={isDarkMode ? '#ccc' : '#666'} />
               </TouchableOpacity>
             </View>
 
             <View style={styles.modalBody}>
-              <Text style={styles.inputLabel}>Nom de la catégorie</Text>
+              <Text style={[styles.inputLabel, { color: isDarkMode ? '#fff' : '#333' }]}>Nom de la catégorie</Text>
               <TextInput
-                style={styles.textInput}
+                style={[styles.textInput, { 
+                  backgroundColor: isDarkMode ? '#333' : '#fff',
+                  borderColor: isDarkMode ? '#444' : '#e0e0e0',
+                  color: isDarkMode ? '#fff' : '#333'
+                }]}
                 value={categoryName}
                 onChangeText={setCategoryName}
                 placeholder="Saisir le nom..."
+                placeholderTextColor={isDarkMode ? '#999' : '#999'}
                 autoFocus
               />
 
-              <Text style={styles.inputLabel}>Couleur</Text>
+              <Text style={[styles.inputLabel, { color: isDarkMode ? '#fff' : '#333' }]}>Couleur</Text>
               <View style={styles.colorsContainer}>
                 {COLORS.map(renderColorOption)}
               </View>
 
               <View style={styles.previewContainer}>
-                <Text style={styles.previewLabel}>Aperçu:</Text>
-                <View style={styles.previewCategory}>
+                <Text style={[styles.previewLabel, { color: isDarkMode ? '#ccc' : '#666' }]}>Aperçu:</Text>
+                <View style={[styles.previewCategory, { backgroundColor: isDarkMode ? '#333' : '#f5f5f5' }]}>
                   <View style={[styles.categoryColor, { backgroundColor: selectedColor }]}>
                     <Folder size={16} color="#fff" />
                   </View>
-                  <Text style={styles.previewText}>
+                  <Text style={[styles.previewText, { color: isDarkMode ? '#fff' : '#333' }]}>
                     {categoryName || 'Nom de la catégorie'}
                   </Text>
                 </View>
@@ -313,10 +320,10 @@ export default function CategoriesScreen() {
 
             <View style={styles.modalFooter}>
               <TouchableOpacity
-                style={styles.cancelButton}
+                style={[styles.cancelButton, { backgroundColor: isDarkMode ? '#333' : '#f5f5f5' }]}
                 onPress={resetModal}
               >
-                <Text style={styles.cancelButtonText}>Annuler</Text>
+                <Text style={[styles.cancelButtonText, { color: isDarkMode ? '#ccc' : '#666' }]}>Annuler</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.saveButton}
@@ -337,21 +344,17 @@ export default function CategoriesScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
     marginTop: 5,
   },
   addButton: {
@@ -370,7 +373,6 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -388,13 +390,11 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
-    color: '#666',
   },
   categoriesList: {
     padding: 16,
   },
   categoryCard: {
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -428,12 +428,10 @@ const styles = StyleSheet.create({
   categoryName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 2,
   },
   categoryCount: {
     fontSize: 14,
-    color: '#666',
   },
   categoryActions: {
     flexDirection: 'row',
@@ -456,13 +454,11 @@ const styles = StyleSheet.create({
   emptyStateText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#666',
     marginTop: 16,
     marginBottom: 8,
   },
   emptyStateSubtext: {
     fontSize: 14,
-    color: '#999',
     textAlign: 'center',
   },
   modalOverlay: {
@@ -472,7 +468,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#fff',
     borderRadius: 16,
     width: '90%',
     maxWidth: 400,
@@ -488,7 +483,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
   },
   modalBody: {
     padding: 20,
@@ -496,12 +490,10 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 8,
   },
   textInput: {
     borderWidth: 1,
-    borderColor: '#e0e0e0',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
@@ -529,19 +521,16 @@ const styles = StyleSheet.create({
   previewLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
     marginBottom: 8,
   },
   previewCategory: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     borderRadius: 8,
     padding: 12,
   },
   previewText: {
     fontSize: 16,
-    color: '#333',
     marginLeft: 12,
   },
   modalFooter: {
@@ -555,12 +544,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: '#f5f5f5',
     alignItems: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
-    color: '#666',
   },
   saveButton: {
     flex: 1,

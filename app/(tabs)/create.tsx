@@ -13,6 +13,7 @@ import {
 import { useRouter } from 'expo-router';
 import { useNotes } from '@/contexts/NotesContext';
 import { useAnimation } from '@/contexts/AnimationContext';
+import { useTheme } from '@/contexts/ThemeContext';
 import { FileText, SquareCheck as CheckSquare, Mic, CreditCard as Edit3, Image as ImageIcon, Calendar, Tag, Palette, Clock, X } from 'lucide-react-native';
 import { TEMPLATES, applyTemplate, Template } from '@/utils/templates';
 
@@ -93,6 +94,7 @@ export default function CreateScreen() {
     widget2Animations,
     widget3Animations
   } = useAnimation();
+  const { isDarkMode } = useTheme();
   const [showTemplates, setShowTemplates] = useState(false);
 
   // Animations pour les icônes
@@ -241,7 +243,7 @@ export default function CreateScreen() {
     return (
       <TouchableOpacity
         key={noteType.id}
-        style={styles.typeCard}
+        style={[styles.typeCard, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}
         onPress={() => handleCreateNote(noteType.id)}
       >
         <Animated.View
@@ -254,8 +256,8 @@ export default function CreateScreen() {
           <IconComponent size={24} color="#fff" />
         </Animated.View>
         <View style={styles.typeContent}>
-          <Text style={styles.typeTitle}>{noteType.title}</Text>
-          <Text style={styles.typeDescription}>{noteType.description}</Text>
+          <Text style={[styles.typeTitle, { color: isDarkMode ? '#fff' : '#333' }]}>{noteType.title}</Text>
+          <Text style={[styles.typeDescription, { color: isDarkMode ? '#ccc' : '#666' }]}>{noteType.description}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -292,7 +294,7 @@ export default function CreateScreen() {
     return (
       <TouchableOpacity
         key={action.id}
-        style={styles.quickActionCard}
+        style={[styles.quickActionCard, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}
         onPress={() => handleQuickAction(action.id)}
       >
         <Animated.View
@@ -305,8 +307,8 @@ export default function CreateScreen() {
           <IconComponent size={20} color="#fff" />
         </Animated.View>
         <View style={styles.quickActionContent}>
-          <Text style={styles.quickActionTitle}>{action.title}</Text>
-          <Text style={styles.quickActionDescription}>{action.description}</Text>
+          <Text style={[styles.quickActionTitle, { color: isDarkMode ? '#fff' : '#333' }]}>{action.title}</Text>
+          <Text style={[styles.quickActionDescription, { color: isDarkMode ? '#ccc' : '#666' }]}>{action.description}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -316,34 +318,34 @@ export default function CreateScreen() {
     return (
       <TouchableOpacity
         key={template.id}
-        style={styles.templateCard}
+        style={[styles.templateCard, { backgroundColor: isDarkMode ? '#2a2a2a' : undefined }]}
         onPress={() => handleApplyTemplate(template)}
       >
         <View style={[styles.templatePreview, { backgroundColor: template.backgroundColor }]}>
-          <Text style={styles.templateName}>{template.name}</Text>
-          <Text style={styles.templateDescription}>{template.description}</Text>
+          <Text style={[styles.templateName, { color: isDarkMode ? '#fff' : '#333' }]}>{template.name}</Text>
+          <Text style={[styles.templateDescription, { color: isDarkMode ? '#ccc' : '#666' }]}>{template.description}</Text>
         </View>
       </TouchableOpacity>
     );
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Créer</Text>
-        <Text style={styles.headerSubtitle}>Choisissez le type de contenu à créer</Text>
+    <SafeAreaView style={[styles.container, { backgroundColor: isDarkMode ? '#1a1a1a' : '#f5f5f5' }]}>
+      <View style={[styles.header, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff', borderBottomColor: isDarkMode ? '#333' : '#e0e0e0' }]}>
+        <Text style={[styles.headerTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Créer</Text>
+        <Text style={[styles.headerSubtitle, { color: isDarkMode ? '#ccc' : '#666' }]}>Choisissez le type de contenu à créer</Text>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Types de notes</Text>
+          <Text style={[styles.sectionTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Types de notes</Text>
           <View style={styles.typesGrid}>
             {NOTE_TYPES.map((noteType, index) => renderNoteType(noteType, index))}
           </View>
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Actions rapides</Text>
+          <Text style={[styles.sectionTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Actions rapides</Text>
           <View style={styles.quickActionsGrid}>
             {QUICK_ACTIONS.map((action, index) => renderQuickAction(action, index))}
           </View>
@@ -355,11 +357,11 @@ export default function CreateScreen() {
       {/* Modal des modèles */}
       {showTemplates && (
         <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
+          <View style={[styles.modalContent, { backgroundColor: isDarkMode ? '#2a2a2a' : '#fff' }]}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Choisir un modèle</Text>
+              <Text style={[styles.modalTitle, { color: isDarkMode ? '#fff' : '#333' }]}>Choisir un modèle</Text>
               <TouchableOpacity onPress={() => setShowTemplates(false)} style={styles.closeButton}>
-                <X size={24} color="#666" />
+                <X size={24} color={isDarkMode ? '#ccc' : '#666'} />
               </TouchableOpacity>
             </View>
             <ScrollView style={styles.templatesList} showsVerticalScrollIndicator={false}>
@@ -375,25 +377,20 @@ export default function CreateScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   header: {
-    backgroundColor: '#fff',
     paddingHorizontal: 16,
     paddingVertical: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   headerTitle: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#333',
     marginBottom: 4,
     marginTop: 115,
   },
   headerSubtitle: {
     fontSize: 16,
-    color: '#666',
   },
   content: {
     flex: 1,
@@ -405,14 +402,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 16,
   },
   typesGrid: {
     gap: 12,
   },
   typeCard: {
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
     flexDirection: 'row',
@@ -437,12 +432,10 @@ const styles = StyleSheet.create({
   typeTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 4,
   },
   typeDescription: {
     fontSize: 14,
-    color: '#666',
   },
   quickActionsGrid: {
     flexDirection: 'row',
@@ -450,7 +443,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   quickActionCard: {
-    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
     width: '48%',
@@ -475,13 +467,11 @@ const styles = StyleSheet.create({
   quickActionTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 4,
     textAlign: 'center',
   },
   quickActionDescription: {
     fontSize: 12,
-    color: '#666',
     textAlign: 'center',
     lineHeight: 16,
   },
@@ -498,7 +488,6 @@ const styles = StyleSheet.create({
     zIndex: 1000,
   },
   modalContent: {
-    backgroundColor: '#fff',
     borderRadius: 16,
     width: '90%',
     maxHeight: '80%',
@@ -519,7 +508,6 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '600',
-    color: '#333',
   },
   closeButton: {
     padding: 4,
@@ -544,12 +532,10 @@ const styles = StyleSheet.create({
   templateName: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
     marginBottom: 4,
   },
   templateDescription: {
     fontSize: 14,
-    color: '#666',
     lineHeight: 20,
   },
 });
