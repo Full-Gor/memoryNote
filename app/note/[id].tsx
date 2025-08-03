@@ -289,7 +289,6 @@ export default function NoteDetailScreen() {
                 {note.type === 'text' ? (
                     <View>
                         <View style={styles.contentHeader}>
-                            <Text style={styles.label}>Note texte</Text>
                             <View style={styles.contentActions}>
                                 <PDFButton
                                     title="PDF"

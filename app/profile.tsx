@@ -525,10 +525,7 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 12,
         elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
+        
     },
     userAvatar: {
         width: 60,
@@ -560,10 +557,7 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 12,
         elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
+        
     },
     statNumber: {
         fontSize: 24,
@@ -583,10 +577,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         marginBottom: 8,
         elevation: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.05,
-        shadowRadius: 2,
+        
     },
     profileItemLeft: {
         flexDirection: 'row',
@@ -662,10 +653,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         padding: 20,
         elevation: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
+        
     },
     modalHeader: {
         flexDirection: 'row',

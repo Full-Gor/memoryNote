@@ -419,11 +419,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
+
   },
   quickSettingText: {
     fontSize: 12,
@@ -435,11 +431,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 16,
     marginHorizontal: 16,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 1,
+
   },
   backButtonText: {
     fontSize: 14,

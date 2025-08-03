@@ -98,6 +98,7 @@ export class PDFService {
               padding: 30px;
               border-radius: 10px;
               box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              
             }
             .header {
               border-bottom: 2px solid #2196F3;
@@ -118,14 +119,7 @@ export class PDFService {
               color: #666;
               margin-bottom: 20px;
             }
-            .type-badge {
-              background: #E3F2FD;
-              color: #1976D2;
-              padding: 5px 12px;
-              border-radius: 15px;
-              font-size: 12px;
-              font-weight: bold;
-            }
+
             .category-badge {
               background: #F3E5F5;
               color: #7B1FA2;
@@ -173,10 +167,7 @@ export class PDFService {
               <h1 class="title">${note.title || 'Note sans titre'}</h1>
               <div class="metadata">
                 <div>
-                  <span class="type-badge">
-                    <span class="icon">${typeIcon}</span>
-                    ${this.getTypeLabel(note.type)}
-                  </span>
+
                   ${categoryName ? `<span class="category-badge">${categoryName}</span>` : ''}
                 </div>
                 <div>Créé le ${date}</div>
@@ -206,10 +197,7 @@ export class PDFService {
         <div class="note-item">
           <div class="note-header">
             <h3 class="note-title">${note.title || 'Note sans titre'}</h3>
-            <span class="type-badge">
-              <span class="icon">${typeIcon}</span>
-              ${this.getTypeLabel(note.type)}
-            </span>
+
           </div>
           <div class="note-content">${note.content.substring(0, 200)}${note.content.length > 200 ? '...' : ''}</div>
           <div class="note-meta">
@@ -241,6 +229,7 @@ export class PDFService {
               padding: 30px;
               border-radius: 10px;
               box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              
             }
             .header {
               text-align: center;
@@ -277,14 +266,7 @@ export class PDFService {
               color: #333;
               margin: 0;
             }
-            .type-badge {
-              background: #E3F2FD;
-              color: #1976D2;
-              padding: 5px 12px;
-              border-radius: 15px;
-              font-size: 12px;
-              font-weight: bold;
-            }
+
             .note-content {
               color: #666;
               line-height: 1.5;
